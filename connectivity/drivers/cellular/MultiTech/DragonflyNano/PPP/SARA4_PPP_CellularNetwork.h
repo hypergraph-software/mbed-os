@@ -35,6 +35,7 @@ public:
 
 protected:
     virtual nsapi_error_t set_access_technology_impl(RadioAccessTechnology opRat);
+    virtual nsapi_error_t set_operator_profile_impl(OperatorProfile opProf);
 };
 
 } // namespace mbed
