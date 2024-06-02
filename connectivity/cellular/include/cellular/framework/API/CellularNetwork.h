@@ -94,6 +94,34 @@ public:
         Attached,
     };
 
+    enum OperatorProfile {
+        PROF_UNDEFINED = 0,
+        PROF_SIM_SELECT,
+        PROF_ATT,
+        PROF_VERIZON,
+        PROF_TELSTRA,
+        PROF_TMOBILE_US,
+        PROF_CHINA_TELECOM,
+        PROF_SPRINT,
+        PROF_VODAFONE,
+        PROF_NTTDOCOMO,
+        PROF_TELUS,
+        PROF_SOFTBANK,
+        PROF_DEUTSCHE_TELEKOM,
+        PROF_US_CELLULAR,
+        PROF_VIVO,
+        PROF_SKT,
+        PROF_KDDI,
+        PROF_ROGERS,
+        PROF_CLARO_BRASIL,
+        PROF_TIM_BRASIL,
+        PROF_ORANGE_FRANCE,
+        PROF_GLOBAL,
+        PROF_STD_EUROPE,
+        PROF_UNKNOWN,
+        PROF_MAX
+    };
+
     enum RadioAccessTechnology {
         RAT_GSM,
         RAT_GSM_COMPACT,
@@ -241,6 +269,17 @@ public:
      *                  NSAPI_ERROR_DEVICE_ERROR on failure
      */
     virtual nsapi_error_t detach() = 0;
+
+    /**
+     * Sets mobile network operator profile
+     *
+     * @param prof      Mobile Network Operator Profile
+     * @return          NSAPI_ERROR_OK on success
+     *                  NSAPI_ERROR_UNSUPPORTED if the given profile is PROF_UNKNOWN or inheriting target class
+     *                                          has not implemented emthdo set_operator_profile_impl(...)
+     *                  OR return value of the inheriting target class set_operator_profile_impl(...)
+     */
+    virtual nsapi_error_t set_operator_profile(OperatorProfile prof) = 0;
 
     /** Sets radio access technology.
      *
