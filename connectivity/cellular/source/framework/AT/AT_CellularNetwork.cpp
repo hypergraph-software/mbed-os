@@ -73,8 +73,8 @@ static const char *const rat_str[AT_CellularNetwork::RAT_MAX] = {
 
 AT_CellularNetwork::AT_CellularNetwork(ATHandler &atHandler, AT_CellularDevice &device) :
     _connection_status_cb(), _ciotopt_network_support_cb(), _op_act(RAT_UNKNOWN),
-    _connect_status(NSAPI_STATUS_DISCONNECTED), _supported_network_opt(CIOT_OPT_MAX),
-    _at(atHandler), _device(device)
+    _op_prof(PROF_UNKNOWN), _connect_status(NSAPI_STATUS_DISCONNECTED),
+    _supported_network_opt(CIOT_OPT_MAX), _at(atHandler), _device(device)
 {
     _urc_funcs[C_EREG] = callback(this, &AT_CellularNetwork::urc_cereg);
     _urc_funcs[C_GREG] = callback(this, &AT_CellularNetwork::urc_cgreg);
@@ -331,6 +331,23 @@ nsapi_error_t AT_CellularNetwork::set_access_technology(RadioAccessTechnology op
     _op_act = opAct;
 
     return set_access_technology_impl(opAct);
+}
+
+nsapi_error_t AT_CellularNetwork::set_operator_profile_impl(OperatorProfile opProf)
+{
+    _op_prof = PROF_UNKNOWN;
+    return NSAPI_ERROR_UNSUPPORTED;
+}
+
+nsapi_error_t AT_CellularNetwork::set_operator_profile(OperatorProfile opProf)
+{
+    if (opProf == PROF_UNKNOWN) {
+        return NSAPI_ERROR_UNSUPPORTED;
+    }
+
+    _op_prof = opProf;
+
+    return set_operator_profile_impl(opProf);
 }
 
 nsapi_error_t AT_CellularNetwork::scan_plmn(operList_t &operators, int &opsCount)
