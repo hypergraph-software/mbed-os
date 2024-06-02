@@ -65,6 +65,8 @@ public: // CellularNetwork
 
     virtual nsapi_error_t set_access_technology(RadioAccessTechnology rat);
 
+    virtual nsapi_error_t set_operator_profile(OperatorProfile prof);
+
     virtual nsapi_error_t scan_plmn(operList_t &operators, int &ops_count);
 
     virtual nsapi_error_t set_ciot_optimization_config(CIoT_Supported_Opt supported_opt,
@@ -105,6 +107,14 @@ protected:
      */
     virtual nsapi_error_t set_access_technology_impl(RadioAccessTechnology op_rat);
 
+    /** Sets the mobile network operator.
+     *
+     * @param op_prof Mobile network operator profile
+     *
+     * @return        zero on success
+     */
+    virtual nsapi_error_t set_operator_profile_impl(OperatorProfile op_prof);
+
     /** Sends a command to query the active state of the PDP contexts.
      *  Can be overridden by the target class.
      */
@@ -138,6 +148,7 @@ protected:
     Callback<void(nsapi_event_t, intptr_t)> _connection_status_cb;
     Callback<void(CIoT_Supported_Opt)> _ciotopt_network_support_cb;
     RadioAccessTechnology _op_act;
+    OperatorProfile _op_prof;
     nsapi_connection_status_t _connect_status;
     CIoT_Supported_Opt _supported_network_opt;
 
