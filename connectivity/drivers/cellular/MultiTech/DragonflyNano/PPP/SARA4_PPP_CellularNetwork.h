@@ -18,7 +18,11 @@
 #ifndef SARA4_PPP_CELLULAR_NETWORK_H_
 #define SARA4_PPP_CELLULAR_NETWORK_H_
 
+#include "CellularLog.h"
+#include "drivers/Timer.h"
+#include "mbed_wait_api.h"
 #include "AT_CellularNetwork.h"
+#include "AT_CellularContext.h"
 
 namespace mbed {
 
@@ -26,6 +30,8 @@ class SARA4_PPP_CellularNetwork : public AT_CellularNetwork {
 public:
     SARA4_PPP_CellularNetwork(ATHandler &atHandler, AT_CellularDevice &device);
     virtual ~SARA4_PPP_CellularNetwork();
+
+    nsapi_error_t dgfly_reboot();
 
 protected:
     virtual nsapi_error_t set_access_technology_impl(RadioAccessTechnology opRat);
