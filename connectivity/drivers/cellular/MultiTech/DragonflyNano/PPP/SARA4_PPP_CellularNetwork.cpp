@@ -29,6 +29,105 @@ SARA4_PPP_CellularNetwork::~SARA4_PPP_CellularNetwork()
 {
 }
 
+nsapi_error_t SARA4_PPP_CellularNetwork::set_operator_profile_impl(OperatorProfile opProf)
+{
+    tr_info("Setting MNO Profile.");
+    nsapi_error_t ret = NSAPI_ERROR_OK;
+
+    CellularNetwork::AttachStatus status;
+
+    get_attach(status);
+
+    if (status == Attached) {
+        tr_debug("Operator profile can only be set in detached state");
+        return NSAPI_ERROR_UNSUPPORTED;
+    }
+
+    _at.lock();
+    switch(opProf) {
+        case PROF_UNDEFINED:
+            _at.at_cmd_discard("+UMNOPROF", "=0");
+            break;
+        case PROF_SIM_SELECT:
+            _at.at_cmd_discard("+UMNOPROF", "=1");
+            break;
+        case PROF_ATT:
+            _at.at_cmd_discard("+UMNOPROF", "=2");
+            break;
+        case PROF_VERIZON:
+            _at.at_cmd_discard("+UMNOPROF", "=3");
+            break;
+        case PROF_TELSTRA:
+            _at.at_cmd_discard("+UMNOPROF", "=4");
+            break;
+        case PROF_TMOBILE_US:
+            _at.at_cmd_discard("+UMNOPROF", "=5");
+            break;
+        case PROF_CHINA_TELECOM:
+            _at.at_cmd_discard("+UMNOPROF", "=6");
+            break;
+        case PROF_SPRINT:
+            _at.at_cmd_discard("+UMNOPROF", "=8");
+            break;
+        case PROF_VODAFONE:
+            _at.at_cmd_discard("+UMNOPROF", "=19");
+            break;
+        case PROF_NTTDOCOMO:
+            _at.at_cmd_discard("+UMNOPROF", "=20");
+            break;
+        case PROF_TELUS:
+             _at.at_cmd_discard("+UMNOPROF", "=21");
+            break;
+        case PROF_SOFTBANK:
+             _at.at_cmd_discard("+UMNOPROF", "=28");
+            break;
+        case PROF_DEUTSCHE_TELEKOM:
+             _at.at_cmd_discard("+UMNOPROF", "=31");
+            break;
+        case PROF_US_CELLULAR:
+             _at.at_cmd_discard("+UMNOPROF", "=32");
+            break;
+        case PROF_VIVO:
+            _at.at_cmd_discard("+UMNOPROF", "=33");
+            break;
+        case PROF_SKT:
+            _at.at_cmd_discard("+UMNOPROF", "=39");
+            break;
+        case PROF_KDDI:
+            _at.at_cmd_discard("+UMNOPROF", "=41");
+            break;
+        case PROF_ROGERS:
+            _at.at_cmd_discard("+UMNOPROF", "=43");
+            break;
+        case PROF_CLARO_BRASIL:
+            _at.at_cmd_discard("+UMNOPROF", "=44");
+            break;
+        case PROF_TIM_BRASIL:
+            _at.at_cmd_discard("+UMNOPROF", "=45");
+            break;
+        case PROF_ORANGE_FRANCE:
+            _at.at_cmd_discard("+UMNOPROF", "=46");
+            break;
+        case PROF_GLOBAL:
+            _at.at_cmd_discard("+UMNOPROF", "=90");
+            break;
+        case PROF_STD_EUROPE:
+            _at.at_cmd_discard("+UMNOPROF", "=100");
+            break;
+        default:
+            _op_prof = PROF_UNKNOWN;
+            ret = NSAPI_ERROR_UNSUPPORTED;
+            break;
+    }
+    _at.unlock();
+
+    if (ret == NSAPI_ERROR_OK) {
+        ret = dgfly_reboot();
+    }
+
+    return ret;
+}
+
 nsapi_error_t SARA4_PPP_CellularNetwork::set_access_technology_impl(RadioAccessTechnology opRat)
 {
     nsapi_error_t ret = NSAPI_ERROR_OK;
